@@ -1,21 +1,20 @@
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependencies
+node_modules/
+dist/
+dist-ssr/
+.vite/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Editor directories and system files
+.vscode/
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
@@ -23,61 +22,40 @@ dist-ssr
 *.sln
 *.sw?
 
-# Ignore Gradle project-specific cache directory
-.gradle
+# Gradle project-specific files
+.gradle/
+build/
 
-# Ignore Gradle build output directory
-build
+# Keep Gradle wrapper files
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
 
-# Node.js dependencies
-node_modules/
-dist/
-.vite/
-
-# Environment variables
+# Node.js and frontend build outputs
+out/
+*.lock
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Logs and Debugging
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+# Ignore npm package-lock if using Yarn or pnpm (Uncomment only if using them)
+# yarn.lock
+# pnpm-lock.yaml
 
-# Build output
-/build/
-.gradle/
-out/
-*.log
-*.lock
+# GitHub Actions workflow temporary files
+.github/workflows/*.log
 
-# macOS system files
-.DS_Store
+# OS-specific files
+Thumbs.db
 
 # VS Code settings
 .vscode/
+!vscode/extensions.json
 
-# Ignore npm package-lock if using yarn or pnpm
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# Ignore GitHub Actions workflow temporary files
-.github/workflows/*.log
-
-# Ignore Gradle-specific files
-.gradle/
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!gradle/wrapper/gradle-wrapper.properties
-
-# Ignore OS-specific files
-Thumbs.db
+# JetBrains (IntelliJ, WebStorm, etc.)
 .idea/
 *.iml
+
+# Swap files
 *.swp
-
-
