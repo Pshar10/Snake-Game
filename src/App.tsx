@@ -17,7 +17,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex flex-col items-center justify-center p-4">
       <div className="max-w-4xl w-full bg-white/10 backdrop-blur-md rounded-xl shadow-2xl overflow-hidden">
         <header className="bg-black/30 p-4 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-white">Snaky Sprint</h1>
+          <h1 className="text-3xl font-bold text-white">Snake Game</h1>
           <div className="flex gap-4">
             <button 
               onClick={() => setCurrentView('game')}
@@ -45,7 +45,7 @@ function App() {
         <footer className="bg-black/30 p-4 text-white/70 text-sm flex justify-between items-center">
           <div>© 2025 Snaky Sprint</div>
           <a 
-            href="https://github.com/yourusername/snaky-sprint" 
+            href="https://github.com/Pshar10/Snake-Game" 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
