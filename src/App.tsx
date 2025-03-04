@@ -43,7 +43,7 @@ function App() {
         </main>
         
         <footer className="bg-black/30 p-4 text-white/70 text-sm flex justify-between items-center">
-          <div>© 2025 Snaky Sprint</div>
+          <div>© 2025 Pranav Sharma </div>
           <a 
             href="https://github.com/Pshar10/Snake-Game" 
             target="_blank" 
