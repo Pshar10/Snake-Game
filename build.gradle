@@ -1,0 +1,25 @@
+plugins {
+    id 'base'
+}
+
+task installDependencies(type: Exec) {
+    group = "build"
+    description = "Install npm dependencies"
+    commandLine "npm", "install"
+}
+
+task buildFrontend(type: Exec) {
+    group = "build"
+    description = "Build the Vite project"
+    dependsOn installDependencies
+    commandLine "npm", "run", "build"
+}
+
+task cleanFrontend(type: Delete) {
+    group = "build"
+    description = "Clean Vite build files"
+    delete fileTree("dist")
+}
+
+clean.dependsOn cleanFrontend
+build.dependsOn buildFrontend
