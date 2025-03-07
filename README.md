@@ -96,17 +96,6 @@ You can play the game **directly in your browser** without any setup:
 
 ---
 
-## 💡 Why This Project?  
-
-This project is a **demonstration of my ability to build high-performance web applications** with modern **frontend frameworks, CI/CD automation, and real-time analytics**.  
-
-I built this game not just for fun but to highlight:  
-✔️ My **expertise in React, TypeScript, and modern web development.**  
-✔️ My **focus on monitoring and analytics using Datadog.**  
-✔️ My **proficiency in setting up CI/CD pipelines with GitHub Actions & Gradle.**  
-
----
-
 ## 🤝 Contributing  
 
 Want to improve the game? Feel free to contribute!  
