@@ -26,7 +26,6 @@ export const useGameLogic = (canvasRef: RefObject<HTMLCanvasElement>) => {
   
   const lastRenderTimeRef = useRef<number>(0);
   const animationFrameIdRef = useRef<number>(0);
-  const gameInitializedRef = useRef<boolean>(false);
 
   // Generate random food position
   const generateFood = (): Position => {

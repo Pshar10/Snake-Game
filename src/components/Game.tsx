@@ -14,8 +14,6 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
   const [countdown, setCountdown] = useState<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const {
-    snake,
-    food,
     direction,
     score,
     gameOver,
@@ -27,21 +25,34 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
     cellSize
   } = useGameLogic(canvasRef);
 
+  const changeDirection = (newDirection: string) => {
+    if (countdown !== null) return; // Ignore clicks during countdown
+
+    if (
+      (newDirection === 'UP' && direction !== 'DOWN') ||
+      (newDirection === 'DOWN' && direction !== 'UP') ||
+      (newDirection === 'LEFT' && direction !== 'RIGHT') ||
+      (newDirection === 'RIGHT' && direction !== 'LEFT')
+    ) {
+      setDirection(newDirection);
+    }
+  };
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (countdown !== null) return; // Ignore key presses during countdown
-    
+
     switch (e.key) {
       case 'ArrowUp':
-        if (direction !== 'DOWN') setDirection('UP');
+        changeDirection('UP');
         break;
       case 'ArrowDown':
-        if (direction !== 'UP') setDirection('DOWN');
+        changeDirection('DOWN');
         break;
       case 'ArrowLeft':
-        if (direction !== 'RIGHT') setDirection('LEFT');
+        changeDirection('LEFT');
         break;
       case 'ArrowRight':
-        if (direction !== 'LEFT') setDirection('RIGHT');
+        changeDirection('RIGHT');
         break;
       case ' ':
         togglePause();
@@ -49,7 +60,7 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
       default:
         break;
     }
-  }, [direction, setDirection, togglePause, countdown]);
+  }, [direction, changeDirection, togglePause, countdown]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -77,7 +88,7 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
   // Countdown effect
   useEffect(() => {
     if (countdown === null) return;
-    
+
     if (countdown > 0) {
       const timer = setTimeout(() => {
         setCountdown(countdown - 1);
@@ -143,7 +154,7 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
             height={gridSize * cellSize}
             className="bg-black/80 rounded-lg shadow-lg"
           />
-          
+
           {/* Countdown overlay */}
           {countdown !== null && (
             <div className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-lg">
@@ -155,7 +166,7 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
               </div>
             </div>
           )}
-          
+
           {gameOver && (
             <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center rounded-lg">
               <h2 className="text-3xl font-bold text-white mb-2">Game Over!</h2>
@@ -178,20 +189,20 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
               </div>
             </div>
           )}
-          
+
           {isPaused && !gameOver && countdown === null && (
             <div className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-lg">
               <h2 className="text-3xl font-bold text-white">Paused</h2>
             </div>
           )}
         </div>
-        
+
         <div className="mt-4 flex justify-between items-center">
           <div className="text-white">
             <p className="text-lg">Player: <span className="font-bold">{playerName}</span></p>
             <p className="text-2xl mt-1">Score: <span className="font-bold">{score}</span></p>
           </div>
-          
+
           <div className="flex gap-2">
             <button
               onClick={togglePause}
@@ -212,7 +223,7 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="md:w-64 bg-black/40 p-4 rounded-lg">
         <h2 className="text-xl font-bold text-white mb-4">How to Play</h2>
         <ul className="text-white/80 space-y-2 text-sm">
@@ -221,16 +232,36 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
           <li>• Avoid hitting walls and yourself</li>
           <li>• Press <span className="font-bold">space</span> to pause/resume</li>
         </ul>
-        
+
         <div className="mt-6 pt-6 border-t border-white/20">
           <h3 className="text-lg font-bold text-white mb-2">Controls</h3>
           <div className="grid grid-cols-3 gap-2 text-center">
             <div></div>
-            <div className="bg-white/20 p-2 rounded">↑</div>
+            <button
+              onClick={() => changeDirection('UP')}
+              className="bg-white shadow-md text-black p-2 rounded"
+            >
+              ↑
+            </button>
             <div></div>
-            <div className="bg-white/20 p-2 rounded">←</div>
-            <div className="bg-white/20 p-2 rounded">↓</div>
-            <div className="bg-white/20 p-2 rounded">→</div>
+            <button
+              onClick={() => changeDirection('LEFT')}
+              className="bg-white shadow-md text-black p-2 rounded"
+            >
+              ←
+            </button>
+            <button
+              onClick={() => changeDirection('DOWN')}
+              className="bg-white shadow-md text-black p-2 rounded"
+            >
+              ↓
+            </button>
+            <button
+              onClick={() => changeDirection('RIGHT')}
+              className="bg-white shadow-md text-black p-2 rounded"
+            >
+              →
+            </button>
           </div>
         </div>
       </div>

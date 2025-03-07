@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Github } from 'lucide-react';
 import Game from './components/Game';
 import Leaderboard from './components/Leaderboard';
