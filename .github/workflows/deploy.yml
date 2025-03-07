@@ -17,17 +17,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
+      # Set up and build using Node.js/Vite instead of Java/Gradle since the context suggests a React app
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          distribution: 'temurin'
-          java-version: 21
+          node-version: '16'  # Use an appropriate version for your project
 
-      - name: Grant execute permission for Gradle wrapper
-        run: chmod +x gradlew
+      - name: Install dependencies
+        run: npm install
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build with Vite
+        run: npm run build
+        env:
+          VITE_DATADOG_APPLICATION_ID: ${{ secrets.DATADOGAPPLICATIONID }}
+          VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.DATADOGCLIENTTOKEN }}
+          VITE_DATADOG_LOGS_CLIENT_TOKEN: ${{ secrets.DATADOGLOGSCLIENTTOKEN }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -39,7 +43,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Required for GitHub Pages deployment
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -55,4 +59,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: dist 
+          folder: dist

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Trophy, Play, Pause, RotateCcw } from 'lucide-react';
 import { useGameLogic } from '../hooks/useGameLogic';
 import { saveScore } from '../services/leaderboardService';
+import { datadogRum } from "@datadog/browser-rum";
 
 interface GameProps {
   playerName: string;
@@ -25,8 +26,12 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
     cellSize
   } = useGameLogic(canvasRef);
 
+  const logEvent = (action: string, details: object) => {
+    datadogRum.addAction(action, details);
+  };
+
   const changeDirection = (newDirection: string) => {
-    if (countdown !== null) return; // Ignore clicks during countdown
+    if (countdown !== null) return;
 
     if (
       (newDirection === 'UP' && direction !== 'DOWN') ||
@@ -35,32 +40,36 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
       (newDirection === 'RIGHT' && direction !== 'LEFT')
     ) {
       setDirection(newDirection);
+      logEvent('direction_change', { playerName, newDirection });
     }
   };
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (countdown !== null) return; // Ignore key presses during countdown
+    if (countdown !== null) return;
 
+    let newDirection = '';
     switch (e.key) {
       case 'ArrowUp':
-        changeDirection('UP');
+        newDirection = 'UP';
         break;
       case 'ArrowDown':
-        changeDirection('DOWN');
+        newDirection = 'DOWN';
         break;
       case 'ArrowLeft':
-        changeDirection('LEFT');
+        newDirection = 'LEFT';
         break;
       case 'ArrowRight':
-        changeDirection('RIGHT');
+        newDirection = 'RIGHT';
         break;
       case ' ':
         togglePause();
-        break;
+        logEvent('game_pause', { playerName, score, isPaused: !isPaused });
+        return;
       default:
-        break;
+        return;
     }
-  }, [direction, changeDirection, togglePause, countdown]);
+    changeDirection(newDirection);
+  }, [direction, changeDirection, togglePause, isPaused, countdown]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -72,6 +81,7 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
   const handleSubmitScore = async () => {
     if (playerName && score > 0) {
       await saveScore(playerName, score);
+      logEvent('score_submit', { playerName, score });
       resetGame();
     }
   };
@@ -80,40 +90,41 @@ const Game: React.FC<GameProps> = ({ playerName, isNameSet, onStartGame }) => {
     e.preventDefault();
     if (nameInput.trim()) {
       onStartGame(nameInput.trim());
-      // Start countdown when name is submitted
+      logEvent('name_submit', { playerName: nameInput.trim() });
       setCountdown(3);
     }
   };
 
-  // Countdown effect
   useEffect(() => {
     if (countdown === null) return;
 
     if (countdown > 0) {
       const timer = setTimeout(() => {
         setCountdown(countdown - 1);
+        logEvent('countdown_tick', { countdown });
       }, 1000);
       return () => clearTimeout(timer);
     } else if (countdown === 0) {
-      // When countdown reaches 0, start the game
       const timer = setTimeout(() => {
         setCountdown(null);
-        togglePause(); // Unpause the game when countdown finishes
+        togglePause(); // Start the game
+        logEvent('game_start', { playerName });
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [countdown, togglePause]);
+  }, [countdown, togglePause, playerName]);
 
-  // Reset countdown when game is reset
   useEffect(() => {
     if (gameOver) {
       setCountdown(null);
+      logEvent('game_over', { playerName, score });
     }
-  }, [gameOver]);
+  }, [gameOver, score, playerName]);
 
   const startNewGame = () => {
     resetGame();
     setCountdown(3);
+    logEvent('game_reset', { playerName, score });
   };
 
   if (!isNameSet) {
