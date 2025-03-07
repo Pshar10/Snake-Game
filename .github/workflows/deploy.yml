@@ -30,9 +30,9 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         env:
-          VITE_DATADOG_APPLICATION_ID: ${{ secrets.DATADOGAPPLICATIONID }}
-          VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.DATADOGCLIENTTOKEN }}
-          VITE_DATADOG_LOGS_CLIENT_TOKEN: ${{ secrets.DATADOGLOGSCLIENTTOKEN }}
+          VITE_DATADOG_APPLICATION_ID: ${{ secrets.VITE_DATADOG_APPLICATION_ID }}
+          VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_CLIENT_TOKEN }}
+          VITE_DATADOG_LOGS_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_LOGS_CLIENT_TOKEN }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
