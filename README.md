@@ -86,13 +86,13 @@ You can play the game **directly in your browser** without any setup:
 ## 📸 Screenshots  
 
 ### 🎮 Gameplay  
-![Snake Game](game.png)  
+![Snake Game](screenshots/game.png)  
 
 ### 📊 Datadog Monitoring  
-![Monitoring Init](monitor_init.png)  
-![User Behavior Analysis](user_behaviour.png)  
-![Website Views](views.png)  
-![Custom Metrics Tracking](custom_metrics.png)  
+![Monitoring Init](screenshots/monitor_init.png)  
+![User Behavior Analysis](screenshots/user_behaviour.png)  
+![Website Views](screenshots/views.png)  
+![Custom Metrics Tracking](screenshots/custom_metrics.png)  
 
 ---
 
