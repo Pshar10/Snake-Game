@@ -19,7 +19,7 @@ datadogRum.init({
     sessionSampleRate: 100,
     sessionReplaySampleRate: 20,
     defaultPrivacyLevel: 'mask-user-input',
-});
+}); 
 
 
 // Start logging errors and user actions
