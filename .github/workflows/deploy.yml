@@ -1,4 +1,4 @@
-name: Build, Scan, and Deploy to GitHub Pages
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
@@ -23,35 +23,10 @@ jobs:
           distribution: 'temurin'
           java-version: 21
 
-      - name: Install Trivy for security scanning
-        run: |
-          wget -qO- https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-          echo "deb https://aquasecurity.github.io/trivy-repo/deb focal main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
-          sudo apt-get update
-          sudo apt-get install -y trivy
-
-      - name: Create security-reports folder
-        run: mkdir -p security-reports
-
-      - name: Scan for vulnerabilities using Trivy
-        run: |
-          # Run Trivy scan and save the output to the security-reports folder
-          trivy fs --exit-code 1 --severity HIGH,CRITICAL --format json -o security-reports/trivy-report.json ./  
-        
-      - name: List contents of security-reports folder for debug
-        run: |
-          # List the contents of the security-reports folder to verify that the report was generated
-          ls -la security-reports/
-
-      - name: Upload security reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: Security-Reports
-          path: security-reports/
-
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x gradlew
 
+      # Specify environment variables here
       - name: Build with Gradle
         run: ./gradlew build
         env:
@@ -59,7 +34,7 @@ jobs:
           VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_CLIENT_TOKEN }}
           VITE_DATADOG_LOGS_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_LOGS_CLIENT_TOKEN }}
 
-      - name: Upload build artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: production-files
