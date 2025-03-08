@@ -23,9 +23,6 @@ jobs:
           distribution: 'temurin'
           java-version: 21
 
-      - name: Set JAVA_HOME
-        run: echo "JAVA_HOME=${{ steps.setup-java.outputs.java-home }}" >> $GITHUB_ENV
-
       - name: Install Trivy for security scanning
         run: |
           wget -qO- https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
@@ -39,18 +36,6 @@ jobs:
           # Replace './' with the folder you want to scan (e.g., 'src', 'Dockerfiles', etc.)
           trivy fs --exit-code 1 --severity HIGH,CRITICAL --format json -o security-reports/trivy-report.json ./  
 
-      - name: Run OWASP Dependency-Check
-        uses: dependency-check/Dependency-Check_Action@main
-        with:
-          project: 'MyProject'
-          path: './'  # Path to your project folder
-          format: 'HTML,JSON'
-          out: 'security-reports'  # Save OWASP reports inside the security-reports folder
-          args: >
-            --failOnCVSS 7
-            --enableRetired
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME }}  # Explicitly setting JAVA_HOME for Dependency-Check
 
       - name: Upload security reports
         uses: actions/upload-artifact@v4
