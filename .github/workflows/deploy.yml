@@ -53,7 +53,7 @@ jobs:
         with:
           name: production-files
           path: dist/
-
+          
       - name: Upload Dependency Check Report artifact
         uses: actions/upload-artifact@v4
         with:
@@ -74,22 +74,6 @@ jobs:
         with:
           name: production-files
           path: dist/
-
-      - name: Download the report artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dependency-check-report
-          path: reports/
-    
-      - name: Unzip the downloaded report artifact
-        run: |
-          mkdir -p reports
-          unzip -o reports/dependency-check-report.zip -d reports/
-      
-      - name: View the report locally
-        run: |
-          echo "Report downloaded to the reports folder."
-          ls reports
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
