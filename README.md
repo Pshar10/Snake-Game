@@ -6,12 +6,7 @@ The game features a **classic Snake gameplay experience** with a sleek **modern 
 
 ## 🚀 Features  
 
-✅ **Classic Snake Gameplay** – Nostalgic yet modernized for the web.  
-✅ **Real-time Leaderboard** – Tracks high scores and persists game states with player names.  
-✅ **Responsive Design** – Adapts seamlessly to mobile and desktop screens.  
-✅ **Datadog Integration** – Monitors performance, user behavior, and logs custom metrics.  
-✅ **Optimized with Vite & Tailwind CSS** – Ensuring fast builds and a beautiful UI.  
-✅ **Automated CI/CD Pipeline** – Using GitHub Actions and Gradle for seamless deployment.  
+![Features](screenshots/features.png) 
 
 ---
 

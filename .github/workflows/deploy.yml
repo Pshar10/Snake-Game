@@ -90,8 +90,8 @@ jobs:
           commit_message: "Add Dependency Check report"
           branch: main
           file_pattern: reports/*
-          commit_user_name: GitHub Actions  # Optional, sets commit author
-          commit_user_email: actions@github.com  # Optional, sets commit email
+          commit_user_name: GitHub Actions 
+          commit_user_email: actions@github.com  
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
