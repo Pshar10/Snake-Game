@@ -26,13 +26,27 @@ jobs:
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x gradlew
 
-      # Specify environment variables here
       - name: Build with Gradle
         run: ./gradlew build
         env:
           VITE_DATADOG_APPLICATION_ID: ${{ secrets.VITE_DATADOG_APPLICATION_ID }}
           VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_CLIENT_TOKEN }}
           VITE_DATADOG_LOGS_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_LOGS_CLIENT_TOKEN }}
+
+      # Add the Depcheck step here
+      - name: Depcheck
+        uses: dependency-check/Dependency-Check_Action@main
+        id: Depcheck
+        env:
+          JAVA_HOME: /opt/jdk  # Reset JAVA_HOME to match the Depcheck Docker image
+        with:
+          project: 'test'
+          path: '.'
+          format: 'HTML'
+          out: 'reports'  # this is the default, no need to specify unless you wish to override it
+          args: >
+            --failOnCVSS 7
+            --enableRetired
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
