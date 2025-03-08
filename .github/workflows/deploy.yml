@@ -24,7 +24,7 @@ jobs:
           java-version: 21
 
       - name: Set JAVA_HOME
-        run: echo "JAVA_HOME=${{ steps.setup-java.outputs.java-home }}" >> $GITHUB_ENV  # Set JAVA_HOME explicitly
+        run: echo "JAVA_HOME=${{ steps.setup-java.outputs.java-home }}" >> $GITHUB_ENV
 
       - name: Install Trivy for security scanning
         run: |
@@ -48,7 +48,9 @@ jobs:
           out: 'security-reports'  # Save OWASP reports inside the security-reports folder
           args: >
             --failOnCVSS 7
-            --enableRetired        
+            --enableRetired
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME }}  # Explicitly setting JAVA_HOME for Dependency-Check
 
       - name: Upload security reports
         uses: actions/upload-artifact@v4
