@@ -1,4 +1,4 @@
-name: Build and Deploy to GitHub Pages
+name: Build, Scan, and Deploy to GitHub Pages
 
 on:
   push:
@@ -23,10 +23,38 @@ jobs:
           distribution: 'temurin'
           java-version: 21
 
+      - name: Install Trivy for security scanning
+        run: |
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.1_Linux-64bit.tar.gz
+          tar -xzf trivy_0.50.1_Linux-64bit.tar.gz
+          sudo mv trivy /usr/local/bin/
+
+      - name: Scan for vulnerabilities using Trivy
+        run: |
+          mkdir -p security-reports
+          trivy fs --exit-code 1 --severity HIGH,CRITICAL --format json -o security-reports/trivy-report.json .
+
+      - name: Install OWASP Dependency-Check
+        run: |
+          wget https://github.com/jeremylong/DependencyCheck/releases/latest/download/dependency-check-8.4.0-release.zip
+          unzip dependency-check-8.4.0-release.zip
+          mv dependency-check /opt/dependency-check
+
+      - name: Run OWASP Dependency-Check
+        run: |
+          mkdir -p security-reports
+          /opt/dependency-check/bin/dependency-check.sh --project "MyProject" --scan . --format JSON --out security-reports/dependency-check-report.json
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: security-reports/
+
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x gradlew
 
-      # Specify environment variables here
       - name: Build with Gradle
         run: ./gradlew build
         env:
@@ -34,7 +62,7 @@ jobs:
           VITE_DATADOG_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_CLIENT_TOKEN }}
           VITE_DATADOG_LOGS_CLIENT_TOKEN: ${{ secrets.VITE_DATADOG_LOGS_CLIENT_TOKEN }}
 
-      - name: Upload artifact
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: production-files
