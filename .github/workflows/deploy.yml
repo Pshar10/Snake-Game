@@ -30,12 +30,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y trivy
 
+      - name: Create security-reports folder
+        run: mkdir -p security-reports
+
       - name: Scan for vulnerabilities using Trivy
         run: |
-          mkdir -p security-reports
-          # Replace './' with the folder you want to scan (e.g., 'src', 'Dockerfiles', etc.)
+          # Run Trivy scan and save the output to the security-reports folder
           trivy fs --exit-code 1 --severity HIGH,CRITICAL --format json -o security-reports/trivy-report.json ./  
-
+        
+      - name: List contents of security-reports folder for debug
+        run: |
+          # List the contents of the security-reports folder to verify that the report was generated
+          ls -la security-reports/
 
       - name: Upload security reports
         uses: actions/upload-artifact@v4
