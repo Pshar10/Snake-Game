@@ -4,23 +4,14 @@ Welcome to **Snake Game**, a fun, interactive, and highly optimized web-based ga
 
 The game features a **classic Snake gameplay experience** with a sleek **modern UI**, a **real-time leaderboard**, and **Datadog integration** for tracking performance and user interactions.  
 
-## 🚀 Features  
 
 ![Features](screenshots/features.png) 
 
 ---
 
-## 🛠️ Technology Stack  
 
-| **Technology**  | **Purpose** |
-|---------------|------------|
-| **React + TypeScript** | Component-based UI with static typing for maintainability. |
-| **Vite** | Lightning-fast build tool for optimized development. |
-| **Tailwind CSS** | Utility-first CSS framework for responsive design. |
-| **Lucide-React** | Lightweight, modern icons for a sleek UI. |
-| **Datadog RUM** | Real User Monitoring for tracking in-game actions. |
-| **GitHub Actions** | Automates testing, building, and deployment. |
-| **Gradle** | Efficient task execution and dependency management. |
+
+![Stack](screenshots/technology_stack.png) 
 
 ---
 
