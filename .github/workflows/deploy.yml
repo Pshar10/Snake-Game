@@ -34,25 +34,24 @@ jobs:
         run: |
           mkdir -p security-reports
           trivy fs --exit-code 1 --severity HIGH,CRITICAL --format json -o security-reports/trivy-report.json .
-
-      - name: Install OWASP Dependency-Check
-        run: |
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/jeremylong/DependencyCheck/releases/latest | jq -r '.tag_name')
-          echo "Latest Dependency-Check Version: $LATEST_VERSION"
-          wget https://github.com/jeremylong/DependencyCheck/releases/download/${LATEST_VERSION}/dependency-check.zip
-          unzip dependency-check.zip -d /opt/
-          mv /opt/dependency-check /opt/dependency-check-latest
-
+        
       - name: Run OWASP Dependency-Check
-        run: |
-          mkdir -p security-reports
-          /opt/dependency-check/bin/dependency-check.sh --project "MyProject" --scan . --format JSON --out security-reports/dependency-check-report.json
-
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'MyProject'
+          path: '.'
+          format: 'HTML,JSON'
+          out: 'security-reports'  # Save OWASP reports inside the security-reports folder
+          args: >
+            --failOnCVSS 7
+            --enableRetired        
+      
       - name: Upload security reports
         uses: actions/upload-artifact@v4
         with:
-          name: security-reports
+          name: Security-Reports
           path: security-reports/
+      
 
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x gradlew
