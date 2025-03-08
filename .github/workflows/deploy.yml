@@ -33,26 +33,26 @@ jobs:
       - name: Scan for vulnerabilities using Trivy
         run: |
           mkdir -p security-reports
-          trivy fs --exit-code 1 --severity HIGH,CRITICAL --format json -o security-reports/trivy-report.json .
-        
+          # Replace './' with the folder you want to scan (e.g., 'src', 'Dockerfiles', etc.)
+          trivy fs --exit-code 1 --severity HIGH,CRITICAL --format json -o security-reports/trivy-report.json ./  
+
       - name: Run OWASP Dependency-Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: 'MyProject'
-          path: '.'
+          path: './'  # Path to your project folder
           format: 'HTML,JSON'
           out: 'security-reports'  # Save OWASP reports inside the security-reports folder
           args: >
             --failOnCVSS 7
             --enableRetired        
-      
+
       - name: Upload security reports
         uses: actions/upload-artifact@v4
         with:
           name: Security-Reports
           path: security-reports/
       
-
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x gradlew
 
